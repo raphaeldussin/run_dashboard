@@ -87,7 +87,10 @@ def all_dirs_model(ppdir, model="ocean", ftype="ts"):
     # infer all the directories containing these files
     all_dirs = list(set([os.path.dirname(f) for f in all_files]))
     # infer the periods (e.g. 10yr, 5yr) since they are the parent directory
-    periods = list(set([os.path.basename(d) for d in all_dirs]))
+    if ftype == "av":
+        periods = list(set([os.path.basename(d).replace('_',' ').split()[-1] for d in all_dirs]))
+    else:
+        periods = list(set([os.path.basename(d) for d in all_dirs]))
     # build a dictionary with period:directories
     dict_dirs = {}
     for p in periods:
