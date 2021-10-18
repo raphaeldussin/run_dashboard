@@ -58,16 +58,17 @@ def create_pp_series(ppsubdir, startyear=None, endyear=None):
         indexes.append(dateend.year)
         nfiles.update({dateend.year: nfiles_raw})
     # fill in missing dates
-    enddates = np.sort(np.array(indexes))
-    segment_duration = np.diff(enddates).min()
-    start = enddates[0] if startyear is None else startyear
-    end = enddates[-1] if endyear is None else endyear
-    expected_enddates = np.arange(start, end + segment_duration, segment_duration)
-    for date in expected_enddates:
-        if date not in list(enddates):
-            indexes.append(date)
-            nfiles.update({date: np.nan})
-            print(f"expected files for year {date} but none found")
+    if len(indexes) > 1: # we need at least 2 dates
+        enddates = np.sort(np.array(indexes))
+        segment_duration = np.diff(enddates).min()
+        start = enddates[0] if startyear is None else startyear
+        end = enddates[-1] if endyear is None else endyear
+        expected_enddates = np.arange(start, end + segment_duration, segment_duration)
+        for date in expected_enddates:
+            if date not in list(enddates):
+                indexes.append(date)
+                nfiles.update({date: np.nan})
+                print(f"expected files for year {date} but none found")
     return pd.Series(data=nfiles, index=indexes).sort_index()
 
 
@@ -269,7 +270,7 @@ def create_pp_fix_button(comp, year, freppdict):
     # create a widget to resubmit pp
     button = widgets.Button(
         description=f"Fix {comp} for year {year}",
-        layout=widgets.Layout(width="300px", height="40px"),
+        layout=widgets.Layout(width="500px", height="40px"),
     )
     output = widgets.Output()
     display(button, output)
