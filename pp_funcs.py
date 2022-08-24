@@ -214,6 +214,7 @@ def infer_properties_from_ppdir(ppdir):
     freppdict["runname"] = ppdir.replace("/", " ").split()[3]
     freppdict["platform"] = platform_runtype[:cut]
     freppdict["runtype"] = platform_runtype[cut + 1 :]
+    freppdict["statedir"] = ppdir.replace("archive","home").replace("pp", "state/postProcess")
     return freppdict
 
 
@@ -253,7 +254,7 @@ def run_frepp_command(comp, year, freppdict):
     import subprocess
 
     cyear = str(year).zfill(4)
-    frepp_cmd = f"module load fre/{freppdict['freversion']} ; frepp -t {cyear}0101 -R -Y {cyear} -Z {cyear} -s -x {freppdict['xmlpath']} -P {freppdict['platform']} -T {freppdict['runtype']} -c {comp} {freppdict['runname']}"
+    frepp_cmd = f"module load fre/{freppdict['freversion']} ; rm -f {freppdict['statedir']}/{comp}.{cyear} ; frepp -t {cyear}0101 -R -Y {cyear} -Z {cyear} -s -x {freppdict['xmlpath']} -P {freppdict['platform']} -T {freppdict['runtype']} -c {comp} {freppdict['runname']}"
     print(frepp_cmd)
     output = subprocess.check_call(frepp_cmd, shell=True)
     return output
