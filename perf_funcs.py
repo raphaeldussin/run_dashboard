@@ -24,17 +24,21 @@ def read_stats_in_log(model_tarfile):
 
     # infer the number of data columns
     columns = raw_stats[0].split()
+    
     ncol_data = len(columns)
     # add a column for model component
     columns = ['model'] + columns
     formatted_lines = []
     for line in raw_stats[1:]:
         data = line.split()[-ncol_data:]
+        nitems = len(line.split())
+        nondata = line.split()[0:nitems-ncol_data]
+        space= " "
+        modelname = space.join(nondata)
         data_num = []
         for item in data:
             data_num.append(float(item))
-            line = line.replace(item, '')
-        modelname = line.strip()
+
         formatted_line = [modelname] + data_num
         formatted_lines.append(formatted_line)
 
