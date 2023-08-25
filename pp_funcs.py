@@ -235,7 +235,12 @@ def check_for_missing(df, freppdict):
             comp = col.replace("pp", "").replace("/", " ").split()[0]
             for year in list(missing.index):
                 create_pp_fix_button(comp, year, freppdict)
-
+        incomplete = df[col].loc[df[col] < df[col].max()]
+        if len(list(incomplete.index)) > 0:
+            print(f"files incomplete for {col} at years {list(incomplete.index)}")
+            comp = col.replace("pp", "").replace("/", " ").split()[0]
+            for year in list(incomplete.index):
+                create_pp_fix_button(comp, year, freppdict)
     return None
 
 
