@@ -189,7 +189,8 @@ def plot_files_as_bars(df, segment):
         df (pandas.DataFrame): number of files per component per year
         segment (str): segment lenth, e.g. 10yr
     """
-    width = int(segment.replace("yr", "")) - 1
+    #width = int(segment.replace("yr", "")) - 1
+    width = 0.9 # for newer version of pandas
     plt.figure()
     ax = plt.axes()
     df.plot.bar(ax=ax, width=width, stacked=True, figsize=[10, 10])
